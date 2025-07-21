@@ -7,6 +7,7 @@ This repository hosts the Loop Habit Tracker Android application and library mod
 - **Unit tests** should pass. Run `./gradlew test` or `./build.sh build`.
 - **Code style** follows ktlint. Run `./gradlew ktlintCheck` to ensure formatting.
 - **Instrumented tests** exist but require an Android emulator. Use `./build.sh android-tests <API>` only if necessary.
+- Builds and tests are executed automatically by GitHub Actions.
 
 ## Contributing
 
