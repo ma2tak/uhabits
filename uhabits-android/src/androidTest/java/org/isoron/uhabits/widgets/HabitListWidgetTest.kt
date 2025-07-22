@@ -39,16 +39,21 @@ class HabitListWidgetTest : BaseViewTest() {
         setTheme(R.style.WidgetTheme)
         prefs.widgetOpacity = 255
 
-        listOfHabits.add(fixtures.createLongNumericalHabit().apply {
-            color = PaletteColor(11)
-            frequency = Frequency.WEEKLY
-            recompute()
-        })
-        listOfHabits.add(fixtures.createLongHabit().apply {
-            color = PaletteColor(1)
-            frequency = Frequency.DAILY
-            recompute()
-        })
+        listOfHabits = arrayListOf()
+        listOfHabits.add(
+            fixtures.createLongNumericalHabit().apply {
+                color = PaletteColor(11)
+                frequency = Frequency.WEEKLY
+                recompute()
+            }
+        )
+        listOfHabits.add(
+            fixtures.createLongHabit().apply {
+                color = PaletteColor(1)
+                frequency = Frequency.DAILY
+                recompute()
+            }
+        )
 
         val widget = HabitListWidget(targetContext, 0, listOfHabits)
         view = convertToView(widget, 400, 400)

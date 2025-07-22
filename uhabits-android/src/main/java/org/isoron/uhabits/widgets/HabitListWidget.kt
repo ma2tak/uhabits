@@ -20,24 +20,23 @@ package org.isoron.uhabits.widgets
 
 import android.app.PendingIntent
 import android.content.Context
-import org.isoron.uhabits.R
-import org.isoron.uhabits.core.models.Habit
 import android.view.View
 import android.view.ViewGroup.LayoutParams
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.TextView
+import org.isoron.uhabits.R
 import org.isoron.uhabits.activities.common.views.HabitListChart
+import org.isoron.uhabits.core.models.Habit
 import org.isoron.uhabits.core.ui.screens.habits.show.views.HabitListCardPresenter
 import org.isoron.uhabits.core.ui.views.WidgetTheme
 import org.isoron.uhabits.widgets.views.GraphWidgetView
-
 
 class HabitListWidget(
     context: Context,
     val widgetId: Int,
     private val habits: List<Habit>,
     stacked: Boolean = false
-): BaseWidget(context, widgetId, stacked)  {
+) : BaseWidget(context, widgetId, stacked) {
 
     override val defaultHeight: Int = 200
     override val defaultWidth: Int = 200
@@ -55,21 +54,18 @@ class HabitListWidget(
         val widgetView = view as GraphWidgetView
         widgetView.setBackgroundAlpha(preferedBackgroundAlpha)
         if (preferedBackgroundAlpha >= 255) widgetView.setShadowAlpha(0x4f)
-        (widgetView.dataView as HabitListChart).apply{
+        (widgetView.dataView as HabitListChart).apply {
             setHabits(data.habits)
             setHeaderDates(data.weekDayStrings, data.dateStrings)
             setMaxCheckMarks(maxDays)
         }
-
     }
 
     override fun buildView() =
         GraphWidgetView(context, HabitListChart(context)).apply {
             setTitle("Jordan Test")
             val title = findViewById<View>(R.id.title) as TextView
-            title.textSize = 0.toFloat()
+            title.textSize = 0f
             layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT)
-
-
-    }
+        }
 }

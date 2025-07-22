@@ -40,7 +40,7 @@ data class IndividualHabitListState(
     val targetValue: Double,
     val targetType: NumericalHabitType,
     val name: String,
-    val unit: String,
+    val unit: String
 )
 
 class HabitListCardPresenter {
@@ -54,7 +54,7 @@ class HabitListCardPresenter {
             val weekDayStrings = ArrayList<String>()
             val dateStrings = ArrayList<String>()
 
-            for (habit in habits){
+            for (habit in habits) {
                 habitStateLists.add(IndividualHabitListCardPresenter.buildState(habit, theme, maxDays))
             }
 
@@ -85,7 +85,6 @@ class IndividualHabitListCardPresenter {
             theme: Theme,
             maxDays: Int
         ): IndividualHabitListState {
-
             val state = OverviewCardPresenter.buildState(
                 habit = habit,
                 theme = theme
@@ -98,7 +97,7 @@ class IndividualHabitListCardPresenter {
             for (index in 0..maxDays) {
                 values.add(habit.computedEntries.get(today.minus(index)).value)
             }
-            val targetValue =habit.targetValue
+            val targetValue = habit.targetValue
             val targetType = habit.targetType
             val name = habit.name
             val unit = habit.unit
@@ -111,7 +110,7 @@ class IndividualHabitListCardPresenter {
                 targetValue = targetValue,
                 targetType = targetType,
                 name = name,
-                unit = unit,
+                unit = unit
             )
         }
     }
