@@ -89,6 +89,5 @@ class HabitPickerDialogMultiple : HabitPickerDialog() {
             }
             confirm(selectedIds)
         }
-
     }
 }

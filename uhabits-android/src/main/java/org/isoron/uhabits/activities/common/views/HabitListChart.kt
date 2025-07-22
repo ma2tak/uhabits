@@ -32,30 +32,29 @@ import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
-import org.isoron.uhabits.R
-import org.isoron.uhabits.utils.InterfaceUtils.dpToPixels
-import org.isoron.uhabits.utils.InterfaceUtils.getDimension
-import org.isoron.uhabits.utils.StyledResources
-import kotlin.math.max
 import androidx.core.graphics.withTranslation
+import org.isoron.platform.gui.toInt
 import org.isoron.uhabits.HabitsApplication
+import org.isoron.uhabits.R
 import org.isoron.uhabits.activities.habits.list.views.toShortString
 import org.isoron.uhabits.core.models.Entry.Companion.NO
 import org.isoron.uhabits.core.models.Entry.Companion.SKIP
 import org.isoron.uhabits.core.models.Entry.Companion.UNKNOWN
-import org.isoron.uhabits.core.models.NumericalHabitType
 import org.isoron.uhabits.core.models.Entry.Companion.YES_AUTO
 import org.isoron.uhabits.core.models.Entry.Companion.YES_MANUAL
+import org.isoron.uhabits.core.models.NumericalHabitType
 import org.isoron.uhabits.core.models.NumericalHabitType.AT_LEAST
 import org.isoron.uhabits.core.models.NumericalHabitType.AT_MOST
 import org.isoron.uhabits.core.ui.screens.habits.show.views.IndividualHabitListState
+import org.isoron.uhabits.utils.InterfaceUtils.dpToPixels
+import org.isoron.uhabits.utils.InterfaceUtils.getDimension
+import org.isoron.uhabits.utils.StyledResources
 import org.isoron.uhabits.utils.dim
+import kotlin.math.max
 import kotlin.math.min
-import org.isoron.platform.gui.toInt
 
 private val BOLD_TYPEFACE = Typeface.create("sans-serif-condensed", Typeface.BOLD)
 private val NORMAL_TYPEFACE = Typeface.create("sans-serif-condensed", Typeface.NORMAL)
-
 
 class HabitListChart : View {
     private var habits = emptyList<IndividualHabitListState>()
@@ -123,24 +122,22 @@ class HabitListChart : View {
 
         // responsive height
         var heightSpec = heightSpec
-        habitRowSize = resources.getDimensionPixelSize(R.dimen.baseSize ) + 60
+        habitRowSize = resources.getDimensionPixelSize(R.dimen.baseSize) + 60
         val epsilonOfRowSize = 10
         val height = MeasureSpec.getSize(heightSpec)
 
         amtHabits = min(habits.size, (height / habitRowSize) - 1)
         var habitHeight = habitRowSize * (amtHabits + 1)
 
-        if (amtHabits < 1){ // Always have at least one habit. Edge Case
+        if (amtHabits < 1) { // Always have at least one habit. Edge Case
             amtHabits++
             habitRowSize = height / (amtHabits + 1)
             habitHeight = height
-        }
-        else if (habits.size != amtHabits && height - habitHeight >= habitRowSize * 0.50 && (height / (amtHabits + 1) >= habitRowSize - epsilonOfRowSize) ){ // If enough room at the bottom to fit another one, fit another one.
+        } else if (habits.size != amtHabits && height - habitHeight >= habitRowSize * 0.50 && (height / (amtHabits + 1) >= habitRowSize - epsilonOfRowSize)) { // If enough room at the bottom to fit another one, fit another one.
             amtHabits++
             habitRowSize = height / (amtHabits + 1)
             habitHeight = height
-        }
-        else if (height - habitHeight < habitRowSize * 0.50 && (height / (amtHabits + 1) <= habitRowSize + epsilonOfRowSize) ){ // If not enough room to fit another one, make them all slightly bigger
+        } else if (height - habitHeight < habitRowSize * 0.50 && (height / (amtHabits + 1) <= habitRowSize + epsilonOfRowSize)) { // If not enough room to fit another one, make them all slightly bigger
             habitRowSize = height / (amtHabits + 1)
             habitHeight = height
         }
@@ -148,7 +145,6 @@ class HabitListChart : View {
         heightSpec = MeasureSpec.makeMeasureSpec(habitHeight, MeasureSpec.EXACTLY)
         widthSpec = MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY)
         setMeasuredDimension(widthSpec, heightSpec)
-
 
         // Amount of Checkmarks and the size of the habit text
         val firstCheckMarkWithPadding = checkMarkSize + (padding * 4)
@@ -162,20 +158,19 @@ class HabitListChart : View {
             Log.e("JMO", "1")
 
             numCheckMarks = 1
-            textBoxSize = (width -  (rowPadding) - ( firstCheckMarkWithPadding ) - padding  - (ringSizeWithPadding)).toFloat()
-        }
-        else  {
+            textBoxSize = (width - (rowPadding) - (firstCheckMarkWithPadding) - padding - (ringSizeWithPadding)).toFloat()
+        } else {
             Log.e("JMO", "2")
             numCheckMarks = ((((width + (padding * 4) - (rowPadding)) * 0.62) / otherCheckMarkWithPadding)).toInt()
-            textBoxSize = (width -  (rowPadding) - ( getCheckMarkWithPadding(numCheckMarks - 1) )- padding  - (ringSizeWithPadding)).toFloat()
-            if (textBoxSize - otherCheckMarkWithPadding >= minTextBoxSize){
+            textBoxSize = (width - (rowPadding) - (getCheckMarkWithPadding(numCheckMarks - 1)) - padding - (ringSizeWithPadding)).toFloat()
+            if (textBoxSize - otherCheckMarkWithPadding >= minTextBoxSize) {
                 numCheckMarks++
                 textBoxSize -= otherCheckMarkWithPadding
             }
         }
-        if (numCheckMarks > maxCheckMarks)
+        if (numCheckMarks > maxCheckMarks) {
             numCheckMarks = maxCheckMarks
-
+        }
     }
 
     private fun init() {
@@ -225,7 +220,7 @@ class HabitListChart : View {
         }
 
         val em = paint.measureText("m")
-        val checkMarkCenterX = ((padding * 4) + checkMarkSize/2)
+        val checkMarkCenterX = ((padding * 4) + checkMarkSize / 2)
         val checkMarkCenterY = rect.centerY()
 
         // Draw dates
@@ -236,14 +231,13 @@ class HabitListChart : View {
             val y1 = checkMarkCenterY - 0.25 * em
             val y2 = checkMarkCenterY + 1.25 * em
             var dateIndex = numCheckMarks - index - 1
-            if (preferences.isCheckmarkSequenceReversed){
+            if (preferences.isCheckmarkSequenceReversed) {
                 dateIndex = index
             }
 
             canvas.drawText(weekDayStrings[dateIndex], centerX, y1.toFloat(), paint)
             canvas.drawText(dateStrings[dateIndex], centerX, y2.toFloat(), paint)
         }
-
     }
 
     private fun drawRow(canvas: Canvas, habit: IndividualHabitListState, rect: RectF) {
@@ -256,8 +250,8 @@ class HabitListChart : View {
         canvas.drawRoundRect(barRect, round, round, backGroundPaint!!)
 
         // ScoreRing
-        val ringSize  = checkMarkSize.toInt()
-        val ringCenterX = (rect.left + (padding * 1.5) + ringSize/2).toFloat()
+        val ringSize = checkMarkSize.toInt()
+        val ringCenterX = (rect.left + (padding * 1.5) + ringSize / 2).toFloat()
         val ringCenterY = rect.centerY()
         drawRingView(
             canvas = canvas,
@@ -268,13 +262,13 @@ class HabitListChart : View {
         )
 
         // CheckMarks
-        val checkMarkCenterX = ((padding * 4) + checkMarkSize/2)
+        val checkMarkCenterX = ((padding * 4) + checkMarkSize / 2)
         val checkMarkCenterY = rect.centerY()
 
         for (index in 1..numCheckMarks) { // 1 , 2, 3 if  numCheckMarks == 3
 
             var habitCheckIndex = numCheckMarks - index
-            if (preferences.isCheckmarkSequenceReversed){
+            if (preferences.isCheckmarkSequenceReversed) {
                 habitCheckIndex = index - 1
             }
 
@@ -308,8 +302,7 @@ class HabitListChart : View {
                     targetType = habit.targetType,
                     paint = paint
                 )
-            }
-            else { // If Non Numerical Habit
+            } else { // If Non Numerical Habit
                 drawNonNumeric(
                     canvas = canvas,
                     checkRect = checkRect,
@@ -323,15 +316,14 @@ class HabitListChart : View {
         drawAdaptiveText(
             canvas = canvas,
             text = habit.name,
-            x = ringCenterX + ringSize/2 + padding,
+            x = ringCenterX + ringSize / 2 + padding,
             y = rect.top,
-            width= textBoxSize.toInt(), // textAreaWidth,
+            width = textBoxSize.toInt(), // textAreaWidth,
             height = habitRowSize,
             paint = textPaint,
             maxLines = 2
         )
     }
-
 
     private fun drawRingView(
         canvas: Canvas,
@@ -403,15 +395,14 @@ class HabitListChart : View {
         }
     }
 
-
     private fun drawNumberCheck(
         canvas: Canvas,
         checkRect: RectF,
-        value : Double,
+        value: Double,
         threshold: Double,
         units: String,
-        targetType : NumericalHabitType,
-        paint : Paint
+        targetType: NumericalHabitType,
+        paint: Paint
     ) {
         // Color
         val activeColor = when {
@@ -434,9 +425,9 @@ class HabitListChart : View {
         var questionMarkScale = 1.0
         val verticalSpacing = em * 0.3f
 
-        if (units.isNotBlank()){  // if have units
+        if (units.isNotBlank()) { // if have units
             questionMarkScale = 0.8
-            checkRect.offset(0f, - verticalSpacing)
+            checkRect.offset(0f, -verticalSpacing)
         }
 
         // Draw Number
@@ -445,30 +436,29 @@ class HabitListChart : View {
                 drawSkipLine(canvas, checkRect, paint)
             }
             value >= 0 -> {
-                canvas.drawText(numberText,checkRect.centerX(),checkRect.centerY() + em / 3, pNumber)
+                canvas.drawText(numberText, checkRect.centerX(), checkRect.centerY() + em / 3, pNumber)
             }
             preferences.areQuestionMarksEnabled -> {
                 drawSimpleText(canvas, checkRect, pNumber, "?", questionMarkScale)
             }
             else -> {
-                canvas.drawText(numberText,checkRect.centerX(),checkRect.centerY() + em / 3, pNumber)
+                canvas.drawText(numberText, checkRect.centerX(), checkRect.centerY() + em / 3, pNumber)
             }
         }
         // Draw Units
-        if (units.isNotBlank()) {  // if have units
+        if (units.isNotBlank()) { // if have units
             val unitsSub = units.substring(0, min(units.length, 7))
             checkRect.offset(0f, +verticalSpacing + em)
             canvas.drawText(unitsSub, checkRect.centerX(), checkRect.centerY() + em / 3, pUnit)
         }
-
     }
 
     private fun drawNonNumeric(
         canvas: Canvas,
-        checkRect : RectF,
+        checkRect: RectF,
         value: Int,
-        paint: Paint)
-    {
+        paint: Paint
+    ) {
         // Color
         paint.color = when (value) {
             YES_MANUAL, YES_AUTO, SKIP -> paint.color
@@ -508,7 +498,7 @@ class HabitListChart : View {
         isAuto: Boolean = false
     ) {
         val scale = checkMarkSize / scaleFactor
-        canvas.withTranslation(checkRect.left , checkRect.top) {
+        canvas.withTranslation(checkRect.left, checkRect.top) {
             scale(scale, scale)
 
             // Draw Checkmark
@@ -525,14 +515,13 @@ class HabitListChart : View {
             if (isAuto) {
                 // First draw: outline
                 paint.style = Paint.Style.STROKE
-                paint.strokeWidth = paint.strokeWidth  // scale the stroke width
+                paint.strokeWidth = paint.strokeWidth // scale the stroke width
                 drawPath(path, paint)
 
                 // Second draw: inner fill
                 paint.style = Paint.Style.FILL
-                paint.color = mediumContrastTextColor  // your background color
+                paint.color = mediumContrastTextColor // your background color
                 drawPath(path, paint)
-
             } else {
                 // Regular checkmark
                 paint.style = Paint.Style.STROKE
@@ -563,7 +552,7 @@ class HabitListChart : View {
     private fun drawSkipLine(
         canvas: Canvas,
         checkRect: RectF,
-        paint: Paint,
+        paint: Paint
     ) {
         val scale = checkMarkSize / scaleFactor
         canvas.withTranslation(checkRect.left, checkRect.top) {
@@ -576,13 +565,12 @@ class HabitListChart : View {
 
             drawLine(startX, y, endX, y, paint)
         }
-
     }
 
     private fun drawXMark(
         canvas: Canvas,
         checkRect: RectF,
-        paint: Paint,
+        paint: Paint
     ) {
         val scale = checkMarkSize / scaleFactor
         canvas.withTranslation(checkRect.left, checkRect.top) {
@@ -598,20 +586,20 @@ class HabitListChart : View {
             }
             canvas.drawPath(path, paint)
         }
-
     }
-
 
     fun setHabits(habits: List<IndividualHabitListState>) {
         this.habits = habits
         requestLayout()
     }
-    fun setHeaderDates(weekDayStrings : List<String>, dateStrings : List<String>){
+
+    fun setHeaderDates(weekDayStrings: List<String>, dateStrings: List<String>) {
         this.weekDayStrings = weekDayStrings
         this.dateStrings = dateStrings
         requestLayout()
     }
-    fun setMaxCheckMarks(maxCheckMarks : Int){
+
+    fun setMaxCheckMarks(maxCheckMarks: Int) {
         this.maxCheckMarks = maxCheckMarks
     }
 
